@@ -1,0 +1,162 @@
+{% extends 'Index.html' %}
+
+{% block content %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Add Bootstrap CSS link -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    
+    <style>
+        /* Background image and color */
+        body {
+            background-image: url('https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExODdjNGprMnRlOG9kNTN5c2Qybm5ocGpuMTk4ZmN4bzVjd3E0YzFtMiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/YmcIK6A7Y29UPxM1Ze/giphy.gif'); /* Replace with your image URL */
+      		background-size: cover;
+            
+      		
+			
+      		
+            /* Fallback color if the image doesn't load */
+        }
+
+        /* Form background color and text color */
+        .container {
+            background-color: rgba(255, 255, 255, 0.4); /* Semi-transparent white background for the form container */
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .text-right {
+            font-size: 30px;
+            color:black;
+            font-family: 'Times New Roman', Times, serif;
+        }
+       /* .text-center {
+            font-style: bold;
+            font-size: 190%;
+            color:darkblue;
+        }*/
+        .text-left {
+            font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+            font-size: 50px;
+            color:brown;
+        }
+        /* Form button color */
+        .btn-primary {
+            background-color: #007bff; /* Blue color for the "Predict" button */
+        }
+
+        /* Result text color */
+        .result {
+            background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white background for the form container */
+            padding: 20px;
+            border-radius: 10px
+             
+        }
+        h1 {
+            color:rgb(85, 232, 203);
+            font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            font-size: 100px;
+            font-style: bold;
+        }
+        
+    </style>
+    
+</head>
+<body>
+    
+    <div class="container mt-5">
+        <form method="POST">
+            {% csrf_token %}
+            
+            <fieldset>
+                <legend>Algorithm</legend>
+                <div>
+                    <label><input type="radio" name="alg" value="0" checked>Decision Tree Regressor</label>
+                    <label><input type="radio" name="alg" value="1">Random Forest Regressor</label>
+                    <label><input type="radio" name="alg" value="2">Linear Regressor</label>
+                    
+                </div>
+            </fieldset>
+            <div class="form-group row">
+				<div class="col-md-4">
+					<label for="t1" class="col-form-label text-right">GENDER:</label>
+					<input type="text" class="form-control" id="t1" name="t1" required>
+				</div>
+				<div class="col-md-4">
+					<label for="t2" class="col-form-label text-right">AGE:</label>
+					<input type="text" class="form-control" id="t2" name="t2" required>
+				</div>
+				<div class="col-md-4">
+					<label for="t3" class="col-form-label text-right">OCCUPATION:</label>
+					<input type="text" class="form-control" id="t3" name="t3" required>
+				</div>
+			</div>
+			<div class="form-group row">
+				<div class="col-md-4">
+					<label for="t4" class="col-form-label text-right">CITY_CATEGORY:</label>
+					<input type="text" class="form-control" id="t4" name="t4" required>
+				</div>
+				<div class="col-md-4">
+					<label for="t5" class="col-form-label text-right">STAY_IN_CURRENT_CITY:</label>
+					<input type="text" class="form-control" id="t5" name="t5" required>
+				</div>
+				<div class="col-md-4">
+					<label for="t6" class="col-form-label text-right">MARITAL_STATUS:</label>
+					<input type="text" class="form-control" id="t6" name="t6" required>
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<div class="col-md-4">
+					<label for="t7" class="col-form-label text-right">PRODUCT_CAT1:</label>
+					<input type="text" class="form-control" id="t7" name="t7" required>
+				</div>
+				<div class="col-md-4">
+					<label for="t8" class="col-form-label text-right">PRODUCT_CAT2:</label>
+					<input type="text" class="form-control" id="t8" name="t8" required>
+				</div>
+				<div class="col-md-4">
+					<label for="t9" class="col-form-label text-right">PRODUCT_CAT3</label>
+					<input type="text" class="form-control" id="t9" name="t9" required>
+				</div>
+			</div>
+			
+			
+			
+            <!-- ... (Rest of your form elements) ... -->
+
+            <div class="form-group row">
+                <div class="col-sm-6 offset-sm-6">
+                    <button type="submit" class="btn btn-primary" name="Submit">Predict</button>
+                </div>
+            </div>
+        </form>
+        <div class="row mt-3">
+            <div class="col-sm-6 offset-sm-6">
+                <p class="text-left">The PURCHASE IS:</p>
+                <p class="result text-center">{{result}}</p>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-sm-6 offset-sm-6">
+                <p class="text-left">The ROOT MEAN SQUARE ERROR IS:</p>
+                <p class="result text-center">{{RMSE}}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Bootstrap JS and Popper.js -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+
+
+
+{% endblock %}
